@@ -1,0 +1,159 @@
+/* Art portfolio - unique layout + smooth black-purple gradient
+   Keeps script.js starfield/particles and light/dark mode toggling. */
+
+/* Base */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+:root{
+  --panel-radius:14px;
+  --panel-pad:1.25rem;
+  --glass-shadow: 0 10px 30px rgba(0,0,0,0.45);
+}
+
+/* Smooth black -> purple gradient (dark mode) */
+body{
+  margin:0;
+  min-height:100vh;
+  font-family:'Poppins',sans-serif;
+  color:#efeefe;
+  background: radial-gradient(1200px 600px at 10% 10%, rgba(90,10,120,0.22), transparent 10%),
+              linear-gradient(180deg,#050007 0%, #120016 35%, #2b0038 70%, #3b0060 100%);
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+  overflow-x:hidden;
+}
+
+/* Wrapper different layout from other pages */
+.gallery-wrap{
+  max-width:1200px;
+  margin: 4rem auto;
+  padding: 0 1rem;
+}
+
+/* Panels */
+.panel{
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius: var(--panel-radius);
+  padding: var(--panel-pad);
+  box-shadow: var(--glass-shadow);
+  -webkit-backdrop-filter: blur(6px) saturate(1.05);
+  backdrop-filter: blur(6px) saturate(1.05);
+}
+
+/* Header: left aligned title + right back button */
+.art-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:1rem;
+  margin-bottom:1.75rem;
+}
+.head-left h1{
+  margin:0;
+  font-size:2rem;
+  color:#ffda6b;
+  letter-spacing:0.6px;
+  text-shadow:0 6px 18px rgba(90,20,120,0.25);
+}
+.tagline{
+  margin:0.25rem 0 0 0;
+  color:rgba(255,255,255,0.85);
+  font-style:italic;
+  font-size:0.95rem;
+}
+.panel-btn{
+  text-decoration:none;
+  background:rgba(255,255,255,0.06);
+  color:#fff;
+  padding:0.6rem 0.9rem;
+  border-radius:10px;
+  font-weight:600;
+  transition:transform .18s ease, background .2s ease;
+}
+.panel-btn:hover{ transform:translateY(-3px); background:rgba(255,255,255,0.10); }
+
+/* Grid - unique styles */
+.grid-panel{ padding:1.25rem 0 2rem 0; }
+.unique-grid{
+  display:grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap:1.25rem;
+  align-items:start;
+}
+.art-item{
+  border-radius:12px;
+  overflow:hidden;
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.06));
+  transition:transform .4s cubic-bezier(.2,.9,.3,1), box-shadow .35s ease;
+  box-shadow: 0 8px 26px rgba(13,6,30,0.45);
+}
+.art-item img{ display:block; width:100%; height:auto; }
+.art-item figcaption{
+  padding:0.75rem;
+  text-align:center;
+  color: #efe8ff;
+  font-size:0.95rem;
+  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.00));
+}
+.art-item:hover{
+  transform:translateY(-8px) scale(1.02);
+  box-shadow: 0 18px 40px rgba(59,0,88,0.45);
+}
+
+/* Theme toggle - included here specifically for the art page */
+.theme-toggle{
+  position:fixed;
+  top:18px;
+  right:18px;
+  z-index:9999;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:none;
+  cursor:pointer;
+  font-weight:600;
+  color:#fff;
+  background: linear-gradient(135deg,#2b0038,#5b0a6a);
+  box-shadow: 0 10px 30px rgba(10,0,20,0.6);
+  transition: transform .22s ease, background .3s ease, box-shadow .22s ease;
+}
+.theme-toggle .icon{ transition: transform .45s cubic-bezier(.2,.9,.3,1); font-size:1rem; }
+.theme-toggle:hover{ transform:translateY(-3px); box-shadow: 0 18px 44px rgba(25,0,50,0.55); }
+.theme-toggle.toggled .icon{ transform: rotate(320deg) scale(1.05); }
+
+/* Light-mode overrides for this page (keeps particles visible) */
+body.light-mode{
+  background: radial-gradient(900px 420px at 10% 10%, rgba(120,90,200,0.08), transparent 12%),
+              linear-gradient(180deg,#fbf8ff 0%, #f0eaff 40%, #e6e2ff 100%);
+  color:#1a1330;
+}
+body.light-mode .panel{
+  background: linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.86));
+  box-shadow: 0 8px 30px rgba(25,16,40,0.06);
+}
+body.light-mode .head-left h1{ color:#2b0b60; text-shadow:none; }
+body.light-mode .tagline{ color:#3b2c4f; }
+body.light-mode .panel-btn{ background:#fff; color:#2b0b60; box-shadow: 0 4px 14px rgba(43,11,96,0.06); }
+
+/* Ensure starfield canvas (script.js) sits behind panels */
+canvas {
+  filter: drop-shadow(0 0 6px rgba(80,50,140,0.06));
+}
+/* Default (Dark Mode) */
+.art-item figcaption {
+  color: #ffffff;
+}
+
+/* Light Mode */
+body.light-mode .art-item figcaption {
+  color: #222222;   /* or #000 for pure black */
+}
+
+/* Responsiveness */
+@media (max-width:720px){
+  .head-left h1{ font-size:1.4rem; }
+  .gallery-wrap{ margin:2rem 0; }
+  .theme-toggle{ top:12px; right:12px; padding:6px 10px; font-size:0.95rem; }
+}
