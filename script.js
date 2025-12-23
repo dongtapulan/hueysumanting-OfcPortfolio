@@ -106,7 +106,82 @@
       cnv.style.background = "transparent";
     }
   }
+  // === CONSTELLATIONS + PIXEL PARTICLES UPDATE ===
 
+  // pixel particles (8-bit feel)
+  const pixelParticles = Array.from({ length: 80 }, () => ({
+    x: Math.random() * cnv.width,
+    y: Math.random() * cnv.height,
+    vx: (Math.random() - 0.5) * 0.15,
+    vy: (Math.random() - 0.5) * 0.15,
+    size: 2 + Math.floor(Math.random() * 2),
+    opacity: 0.4 + Math.random() * 0.4
+  }));
+
+  function drawStars() {
+    stars.forEach(s => {
+      s.x += s.vx;
+      s.y += s.vy;
+
+      if (s.x < 0 || s.x > cnv.width) s.vx *= -1;
+      if (s.y < 0 || s.y > cnv.height) s.vy *= -1;
+
+      s.twinkle += 0.02;
+
+      c.fillStyle = `rgba(${starColor}, ${0.6 + Math.sin(s.twinkle) * 0.3})`;
+      c.beginPath();
+      c.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+      c.fill();
+    });
+  }
+
+  function drawConstellations() {
+    for (let i = 0; i < stars.length; i++) {
+      for (let j = i + 1; j < stars.length; j++) {
+        const dx = stars[i].x - stars[j].x;
+        const dy = stars[i].y - stars[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+
+        if (dist < 120) {
+          const alpha = 1 - dist / 120;
+          c.strokeStyle = `rgba(${connectColor}, ${alpha * 0.35})`;
+          c.lineWidth = 0.6;
+          c.beginPath();
+          c.moveTo(stars[i].x, stars[i].y);
+          c.lineTo(stars[j].x, stars[j].y);
+          c.stroke();
+        }
+      }
+    }
+  }
+
+  function drawPixelParticles() {
+    pixelParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+
+      if (p.x < 0) p.x = cnv.width;
+      if (p.y < 0) p.y = cnv.height;
+      if (p.x > cnv.width) p.x = 0;
+      if (p.y > cnv.height) p.y = 0;
+
+      c.fillStyle = `rgba(${starColor}, ${p.opacity})`;
+      c.fillRect(p.x, p.y, p.size, p.size);
+    });
+  }
+
+  function animate() {
+    c.clearRect(0, 0, cnv.width, cnv.height);
+
+    drawStars();
+    drawConstellations();
+    drawPixelParticles();
+
+    requestAnimationFrame(animate);
+  }
+
+  updateCanvasColors();
+  animate();
   
   
 })();
